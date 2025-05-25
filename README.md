@@ -1,4 +1,4 @@
-# Metabolic Health
+# Pathways for Up and Down Regulation of Metabolic Health
 
 ![Metabolic Pathway](pathway.png)
 
