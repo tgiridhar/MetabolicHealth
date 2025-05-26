@@ -70,6 +70,140 @@
             color: #4a5568;
         }
 
+        .live-scoring {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 3px solid transparent;
+            background-clip: padding-box;
+            position: relative;
+        }
+
+        .live-scoring::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 15px;
+            padding: 3px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            z-index: -1;
+        }
+
+        .overall-live-score {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .overall-live-score h3 {
+            color: #4a5568;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .live-score-display {
+            font-size: 2.5em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .live-percentage {
+            font-size: 0.7em;
+            color: #718096;
+        }
+
+        .section-scores-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .section-score-item {
+            background: #f8f9ff;
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .section-score-item.excellent {
+            background: #f0fff4;
+            border-left-color: #48bb78;
+            transform: scale(1.02);
+        }
+
+        .section-score-item.good {
+            background: #fffaf0;
+            border-left-color: #ed8936;
+        }
+
+        .section-score-item.needs-improvement {
+            background: #fed7d7;
+            border-left-color: #f56565;
+        }
+
+        .section-label {
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 0.9em;
+        }
+
+        .section-score-text {
+            font-weight: 700;
+            color: #2d3748;
+            font-size: 1.1em;
+        }
+
+        .achievement-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .milestone-celebration {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 15px 0;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
         .section {
             background: white;
             margin-bottom: 30px;
@@ -311,6 +445,18 @@
             .action-buttons {
                 flex-direction: column;
             }
+            
+            .section-scores-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .live-score-display {
+                font-size: 2em;
+            }
+            
+            .section-score-item {
+                padding: 12px;
+            }
         }
     </style>
 </head>
@@ -326,11 +472,64 @@
             <div class="progress-text" id="progressText">0% Complete</div>
         </div>
 
+        <div class="live-scoring">
+            <div class="overall-live-score">
+                <h3>Your Live Score</h3>
+                <div class="live-score-display">
+                    <span id="liveScore">0</span>/<span id="liveMaxScore">125</span>
+                    <span class="live-percentage">(<span id="livePercentage">0</span>%)</span>
+                </div>
+            </div>
+            <div class="section-scores-grid">
+                <div class="section-score-item" id="foodScoreDisplay">
+                    <span class="section-label">Food</span>
+                    <span class="section-score-text"><span id="foodScore">0</span>/<span id="foodMax">23</span></span>
+                </div>
+                <div class="section-score-item" id="sleepScoreDisplay">
+                    <span class="section-label">Sleep</span>
+                    <span class="section-score-text"><span id="sleepScore">0</span>/13</span>
+                </div>
+                <div class="section-score-item" id="mealScoreDisplay">
+                    <span class="section-label">Meal Timing</span>
+                    <span class="section-score-text"><span id="mealScore">0</span>/11</span>
+                </div>
+                <div class="section-score-item" id="lightScoreDisplay">
+                    <span class="section-label">Light</span>
+                    <span class="section-score-text"><span id="lightScore">0</span>/10</span>
+                </div>
+                <div class="section-score-item" id="movementScoreDisplay">
+                    <span class="section-label">Movement</span>
+                    <span class="section-score-text"><span id="movementScore">0</span>/8</span>
+                </div>
+                <div class="section-score-item" id="tempScoreDisplay">
+                    <span class="section-label">Temperature</span>
+                    <span class="section-score-text"><span id="tempScore">0</span>/3</span>
+                </div>
+                <div class="section-score-item" id="mindScoreDisplay">
+                    <span class="section-label">Mind-Body</span>
+                    <span class="section-score-text"><span id="mindScore">0</span>/21</span>
+                </div>
+                <div class="section-score-item" id="ingestedScoreDisplay">
+                    <span class="section-label">Ingested Toxins</span>
+                    <span class="section-score-text"><span id="ingestedScore">0</span>/18</span>
+                </div>
+                <div class="section-score-item" id="envScoreDisplay">
+                    <span class="section-label">Environmental</span>
+                    <span class="section-score-text"><span id="envScore">0</span>/18</span>
+                </div>
+            </div>
+        </div>
+
         <form id="quizForm">
             <!-- Food Section -->
             <div class="section">
                 <div class="section-header">Food</div>
                 <div class="section-content">
+                      <p>
+                        This algorithm is based on the metabolic health framework from 
+                        <cite>Good Energy</cite>, authored by Dr. Casey Means, Surgeon General of the United States.
+                      </p>
+                      
                     <div class="dietary-preference">
                         <h3>Dietary Preference</h3>
                         <p>Please select your dietary preference to receive appropriate scoring:</p>
@@ -2221,6 +2420,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             updateDietaryPreference();
             updateProgress();
+            updateLiveScoring();
             
             // Add event listeners for dietary buttons
             document.querySelectorAll('.dietary-btn').forEach(btn => {
@@ -2229,12 +2429,17 @@
                     this.classList.add('active');
                     dietaryPreference = this.dataset.diet;
                     updateDietaryPreference();
+                    updateLiveScoring();
                 });
             });
             
-            // Add event listeners for all radio buttons to update progress
+            // Add event listeners for all radio buttons to update progress and scoring
             document.querySelectorAll('input[type="radio"]').forEach(radio => {
-                radio.addEventListener('change', updateProgress);
+                radio.addEventListener('change', function() {
+                    updateProgress();
+                    updateLiveScoring();
+                    checkMilestones();
+                });
             });
         });
         
@@ -2242,8 +2447,12 @@
             const omnivoreQuestions = document.getElementById('omnivoreQuestions');
             if (dietaryPreference === 'omnivore') {
                 omnivoreQuestions.style.display = 'block';
+                document.getElementById('foodMax').textContent = '27';
+                document.getElementById('liveMaxScore').textContent = getTotalMaxScore();
             } else {
                 omnivoreQuestions.style.display = 'none';
+                document.getElementById('foodMax').textContent = '23';
+                document.getElementById('liveMaxScore').textContent = getTotalMaxScore();
                 // Clear omnivore question selections
                 document.querySelectorAll('#omnivoreQuestions input[type="radio"]').forEach(radio => {
                     radio.checked = false;
@@ -2258,6 +2467,163 @@
             
             document.getElementById('progressFill').style.width = percentage + '%';
             document.getElementById('progressText').textContent = percentage + '% Complete (' + answeredQuestions + '/' + totalQuestions + ')';
+        }
+        
+        function updateLiveScoring() {
+            const scores = calculateLiveScores();
+            
+            // Update individual section scores
+            document.getElementById('foodScore').textContent = scores.food.score;
+            document.getElementById('sleepScore').textContent = scores.sleep.score;
+            document.getElementById('mealScore').textContent = scores.meal.score;
+            document.getElementById('lightScore').textContent = scores.light.score;
+            document.getElementById('movementScore').textContent = scores.movement.score;
+            document.getElementById('tempScore').textContent = scores.temp.score;
+            document.getElementById('mindScore').textContent = scores.mind.score;
+            document.getElementById('ingestedScore').textContent = scores.ingested.score;
+            document.getElementById('envScore').textContent = scores.env.score;
+            
+            // Update overall score
+            const totalScore = Object.values(scores).reduce((sum, section) => sum + section.score, 0);
+            const totalMaxScore = getTotalMaxScore();
+            const percentage = Math.round((totalScore / totalMaxScore) * 100);
+            
+            document.getElementById('liveScore').textContent = totalScore;
+            document.getElementById('liveMaxScore').textContent = totalMaxScore;
+            document.getElementById('livePercentage').textContent = percentage;
+            
+            // Update section styling based on thresholds
+            updateSectionStyling(scores);
+        }
+        
+        function calculateLiveScores() {
+            const foodMax = dietaryPreference === 'omnivore' ? 27 : 23;
+            
+            return {
+                food: {
+                    score: calculateSectionScore('food', foodMax),
+                    maxScore: foodMax,
+                    threshold: dietaryPreference === 'omnivore' ? 21 : 18
+                },
+                sleep: {
+                    score: calculateSectionScore('sleep', 13),
+                    maxScore: 13,
+                    threshold: 10
+                },
+                meal: {
+                    score: calculateSectionScore('meal', 11),
+                    maxScore: 11,
+                    threshold: 8
+                },
+                light: {
+                    score: calculateSectionScore('light', 10),
+                    maxScore: 10,
+                    threshold: 8
+                },
+                movement: {
+                    score: calculateSectionScore('movement', 8),
+                    maxScore: 8,
+                    threshold: 6
+                },
+                temp: {
+                    score: calculateSectionScore('temp', 3),
+                    maxScore: 3,
+                    threshold: 2
+                },
+                mind: {
+                    score: calculateSectionScore('mind', 21),
+                    maxScore: 21,
+                    threshold: 16
+                },
+                ingested: {
+                    score: calculateSectionScore('ingested', 18),
+                    maxScore: 18,
+                    threshold: 14
+                },
+                env: {
+                    score: calculateSectionScore('env', 18),
+                    maxScore: 18,
+                    threshold: 15
+                }
+            };
+        }
+        
+        function updateSectionStyling(scores) {
+            Object.keys(scores).forEach(sectionKey => {
+                const section = scores[sectionKey];
+                const element = document.getElementById(sectionKey + 'ScoreDisplay');
+                
+                // Remove existing classes
+                element.classList.remove('excellent', 'good', 'needs-improvement');
+                
+                // Add appropriate class based on score
+                if (section.score >= section.threshold) {
+                    element.classList.add('excellent');
+                    // Add achievement badge if section is completed excellently
+                    if (section.score === section.maxScore && !element.querySelector('.achievement-badge')) {
+                        const badge = document.createElement('div');
+                        badge.className = 'achievement-badge';
+                        badge.innerHTML = '★';
+                        badge.style.position = 'relative';
+                        badge.style.top = '0';
+                        badge.style.right = '0';
+                        badge.style.marginLeft = '10px';
+                        badge.style.display = 'inline-flex';
+                        element.appendChild(badge);
+                    }
+                } else if (section.score > 0) {
+                    element.classList.add('good');
+                } else {
+                    element.classList.add('needs-improvement');
+                }
+            });
+        }
+        
+        function checkMilestones() {
+            const totalScore = parseInt(document.getElementById('liveScore').textContent);
+            const totalMaxScore = getTotalMaxScore();
+            const percentage = Math.round((totalScore / totalMaxScore) * 100);
+            
+            // Check for milestone achievements
+            const milestones = [25, 50, 75, 90];
+            const celebrationsShown = window.celebrationsShown || [];
+            
+            milestones.forEach(milestone => {
+                if (percentage >= milestone && !celebrationsShown.includes(milestone)) {
+                    showMilestoneCelebration(milestone);
+                    celebrationsShown.push(milestone);
+                }
+            });
+            
+            window.celebrationsShown = celebrationsShown;
+        }
+        
+        function showMilestoneCelebration(milestone) {
+            const celebration = document.createElement('div');
+            celebration.className = 'milestone-celebration';
+            celebration.innerHTML = `
+                <strong>🎉 Milestone Achieved! 🎉</strong><br>
+                You've reached ${milestone}% on your Good Energy journey!
+            `;
+            
+            const liveScoring = document.querySelector('.live-scoring');
+            liveScoring.appendChild(celebration);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                if (celebration.parentNode) {
+                    celebration.parentNode.removeChild(celebration);
+                }
+            }, 3000);
+        }
+        
+        function getTotalMaxScore() {
+            let total = 0;
+            // Food section (23 base + 4 omnivore if selected)
+            total += dietaryPreference === 'omnivore' ? 27 : 23;
+            // Sleep: 13, Meal: 11, Light: 10, Movement: 8, Temperature: 3, Mind: 21, Ingested: 18, Environmental: 18
+            total += 13 + 11 + 10 + 8 + 3 + 21 + 18 + 18;
+            return total;
         }
         
         function getTotalQuestions() {
@@ -2474,6 +2840,7 @@
             // Show results and hide form
             document.getElementById('quizForm').style.display = 'none';
             document.querySelector('.progress-bar').style.display = 'none';
+            document.querySelector('.live-scoring').style.display = 'none';
             resultsDiv.style.display = 'block';
             
             // Scroll to results
@@ -2502,13 +2869,24 @@
             dietaryPreference = 'omnivore';
             updateDietaryPreference();
             
+            // Reset celebrations tracker
+            window.celebrationsShown = [];
+            
+            // Remove any milestone celebrations
+            document.querySelectorAll('.milestone-celebration').forEach(el => el.remove());
+            
+            // Remove achievement badges
+            document.querySelectorAll('.achievement-badge').forEach(el => el.remove());
+            
             // Show form and hide results
             document.getElementById('quizForm').style.display = 'block';
             document.querySelector('.progress-bar').style.display = 'block';
+            document.querySelector('.live-scoring').style.display = 'block';
             document.getElementById('results').style.display = 'none';
             
-            // Reset progress
+            // Reset progress and live scoring
             updateProgress();
+            updateLiveScoring();
             
             // Scroll to top
             document.querySelector('.quiz-header').scrollIntoView({ behavior: 'smooth' });
