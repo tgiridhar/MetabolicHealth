@@ -1,0 +1,1910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Good Energy Baseline Quiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .quiz-header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .quiz-header h1 {
+            color: #4a5568;
+            margin-bottom: 15px;
+            font-size: 2.5em;
+        }
+
+        .quiz-header p {
+            color: #718096;
+            font-size: 1.1em;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .progress-bar {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .progress-fill {
+            height: 10px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 5px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 10px;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .section {
+            background: white;
+            margin-bottom: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            font-size: 1.5em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .section-content {
+            padding: 30px;
+        }
+
+        .question {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f8f9ff;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #2d3748;
+            font-size: 1.05em;
+        }
+
+        .question-options {
+            display: flex;
+            gap: 15px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .option:hover {
+            background: #e2e8f0;
+        }
+
+        .option input[type="radio"] {
+            margin: 0;
+            transform: scale(1.2);
+        }
+
+        .option label {
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .dietary-preference {
+            background: #fef5e7;
+            border: 2px solid #f6ad55;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .dietary-preference h3 {
+            color: #c05621;
+            margin-bottom: 15px;
+        }
+
+        .dietary-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .dietary-btn {
+            padding: 12px 24px;
+            border: 2px solid #f6ad55;
+            background: white;
+            color: #c05621;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .dietary-btn:hover, .dietary-btn.active {
+            background: #f6ad55;
+            color: white;
+        }
+
+        .calculate-btn {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            display: block;
+            margin: 30px auto;
+            transition: transform 0.2s ease;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .results {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .results h2 {
+            color: #4a5568;
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 2em;
+        }
+
+        .section-result {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+        }
+
+        .section-result.excellent {
+            background: #f0fff4;
+            border-left-color: #48bb78;
+        }
+
+        .section-result.good {
+            background: #fffaf0;
+            border-left-color: #ed8936;
+        }
+
+        .section-result.needs-improvement {
+            background: #fed7d7;
+            border-left-color: #f56565;
+        }
+
+        .section-name {
+            font-weight: 700;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .section-score {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .section-feedback {
+            font-style: italic;
+            color: #4a5568;
+        }
+
+        .overall-score {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .overall-score h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .overall-score .score {
+            font-size: 2em;
+            font-weight: 700;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 12px 24px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .quiz-header h1 {
+                font-size: 2em;
+            }
+            
+            .question-options {
+                flex-direction: column;
+            }
+            
+            .dietary-buttons {
+                flex-direction: column;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="quiz-header">
+            <h1>Good Energy Baseline Quiz</h1>
+            <p>This quiz can help you identify where you may benefit from focusing your energy to move toward Good Energy. The goal is to spark awareness about opportunities to best support your mitochondrial and cellular health.</p>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+            <div class="progress-text" id="progressText">0% Complete</div>
+        </div>
+
+        <form id="quizForm">
+            <!-- Food Section -->
+            <div class="section">
+                <div class="section-header">Food</div>
+                <div class="section-content">
+                    <div class="dietary-preference">
+                        <h3>Dietary Preference</h3>
+                        <p>Please select your dietary preference to receive appropriate scoring:</p>
+                        <div class="dietary-buttons">
+                            <button type="button" class="dietary-btn" data-diet="vegetarian">Vegetarian/Vegan</button>
+                            <button type="button" class="dietary-btn active" data-diet="omnivore">Omnivore</button>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">1. I currently use a food journal or food tracker consistently to monitor what foods and beverages I'm consuming.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="food_1_yes" name="food_1" value="1">
+                                <label for="food_1_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="food_1_no" name="food_1" value="0">
+                                <label for="food_1_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">2. If given a list of foods, I can accurately identify the difference between an unprocessed/minimally processed food and an ultra-processed food.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="food_2_yes" name="food_2" value="1">
+                                <label for="food_2_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="food_2_no" name="food_2" value="0">
+                                <label for="food_2_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">3. I read the food label very carefully on every packaged product I purchase.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="food_3_yes" name="food_3" value="1">
+                                <label for="food_3_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="food_3_no" name="food_3" value="0">
+                                <label for="food_3_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">4. I am confident that I eat fewer than 10 grams of added refined sugar per day. (This does not include fruit sugars or other naturally occurring sugars in their whole food unprocessed form.)</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="food_4_yes" name="food_4" value="1">
+                                <label for="food_4_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="food_4_no" name="food_4" value="0">
+                                <label for="food_4_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">5. I am certain that I have consumed no high-fructose corn syrup in the last month.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="food_5_yes" name="food_5" value="1">
+                                <label for="food_5_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="food_5_no" name="food_5" value="0">
+                                <label for="food_5_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">6. I eat at restaurants, eat fast food, or get takeout for fewer than three meals per week.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="food_6_yes" name="food_6" value="1">
+                                <label for="food_6_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="food_6_no" name="food_6" value="0">
+                                <label for="food_6_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">7. I am certain that I eat at least 30 grams of fiber per day.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="food_7_yes" name="food_7" value="1">
+                                <label for="food_7_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="food_7_no" name="food_7" value="0">
+                                <label for="food_7_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">8. I am certain that I eat at least thirty different plant foods per week (between fruits, vegetables, spices, herbs, nuts, seeds, and legumes).</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="food_8_yes" name="food_8" value="1">
+                                <label for="food_8_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="food_8_no" name="food_8" value="0">
+                                <label for="food_8_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">9. I prepare the majority of my meals at home.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="food_9_yes" name="food_9" value="1">
+                                <label for="food_9_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="food_9_no" name="food_9" value="0">
+                                <label for="food_9_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">10. I eat at least one unsweetened probiotic food every day (such as unsweetened yogurt, kimchi, sauerkraut, natto, tempeh, or miso).</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="food_10_yes" name="food_10" value="1">
+                                <label for="food_10_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="food_10_no" name="food_10" value="0">
+                                <label for="food_10_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">11. I eat at least one serving of cruciferous vegetables every day (such as broccoli, brussels sprouts, cauliflower, bok choy, kale, arugula, cabbage, radishes, rutabaga, or kohlrabi).</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="food_11_yes" name="food_11" value="1">
+                                <label for="food_11_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="food_11_no" name="food_11" value="0">
+                                <label for="food_11_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">12. I eat at least 3 cups of dark leafy greens every day (like spinach, mixed greens, or kale).</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="food_12_yes" name="food_12" value="1">
+                                <label for="food_12_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="food_12_no" name="food_12" value="0">
+                                <label for="food_12_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">13. If I eat outside of the house, I ask about what oils are used and avoid foods with refined seed oils.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="food_13_yes" name="food_13" value="1">
+                                <label for="food_13_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="food_13_no" name="food_13" value="0">
+                                <label for="food_13_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">14. I do not eat foods made with white flour (like flour tortillas, white bread, hamburger or hot dog buns, pastries, doughnuts, cookies, and most crackers).</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="food_14_yes" name="food_14" value="1">
+                                <label for="food_14_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="food_14_no" name="food_14" value="0">
+                                <label for="food_14_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">15. I do not drink sodas of any kind (sweetened or diet).</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="food_15_yes" name="food_15" value="1">
+                                <label for="food_15_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="food_15_no" name="food_15" value="0">
+                                <label for="food_15_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">16. I do not have a big "sweet tooth" and don't tend to crave sugar excessively.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="food_16_yes" name="food_16" value="1">
+                                <label for="food_16_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="food_16_no" name="food_16" value="0">
+                                <label for="food_16_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">17. When they're offered to me, it is easy for me to say no to foods with ultra-processed grains like bread, crackers, cookies, cakes, pastries, and doughnuts. I do not crave these foods.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="food_17_yes" name="food_17" value="1">
+                                <label for="food_17_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="food_17_no" name="food_17" value="0">
+                                <label for="food_17_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">18. When offered to me, it is easy for me to decline eating desserts with added sugars, like cakes, cookies, and ice cream.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="food_18_yes" name="food_18" value="1">
+                                <label for="food_18_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="food_18_no" name="food_18" value="0">
+                                <label for="food_18_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">19. It is easy for me to avoid and decline refined liquid sugars like soda, sweet tea, lemonade, fruit juices, Frappuccinos, sweetened coffee beverages, slushies, and chocolate milk. I rarely, if ever, drink these.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="food_19_yes" name="food_19" value="1">
+                                <label for="food_19_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="food_19_no" name="food_19" value="0">
+                                <label for="food_19_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">20. I drink coffee or tea without any natural or artificial sweeteners.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="food_20_yes" name="food_20" value="1">
+                                <label for="food_20_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="food_20_no" name="food_20" value="0">
+                                <label for="food_20_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">21. I do not eat artificial sweeteners like aspartame, Equal, or sucralose.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="food_21_yes" name="food_21" value="1">
+                                <label for="food_21_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="food_21_no" name="food_21" value="0">
+                                <label for="food_21_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">22. I can go more than four hours without eating during the day and feel fine, without excess hunger or cravings.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="food_22_yes" name="food_22" value="1">
+                                <label for="food_22_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="food_22_no" name="food_22" value="0">
+                                <label for="food_22_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">23. I avoid conventional/nonorganic foods and buy mostly organic food or food directly from farmers' markets.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="food_23_yes" name="food_23" value="1">
+                                <label for="food_23_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="food_23_no" name="food_23" value="0">
+                                <label for="food_23_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Omnivore-specific questions -->
+                    <div id="omnivoreQuestions" class="omnivore-questions">
+                        <div class="question">
+                            <div class="question-text">24. I avoid farm-raised fish and eat mostly wild-caught fish.</div>
+                            <div class="question-options">
+                                <div class="option">
+                                    <input type="radio" id="food_24_yes" name="food_24" value="1">
+                                    <label for="food_24_yes">Yes</label>
+                                </div>
+                                <div class="option">
+                                    <input type="radio" id="food_24_no" name="food_24" value="0">
+                                    <label for="food_24_no">No</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="question">
+                            <div class="question-text">25. I avoid conventional meats and mostly eat organic pasture-raised grass-fed meats.</div>
+                            <div class="question-options">
+                                <div class="option">
+                                    <input type="radio" id="food_25_yes" name="food_25" value="1">
+                                    <label for="food_25_yes">Yes</label>
+                                </div>
+                                <div class="option">
+                                    <input type="radio" id="food_25_no" name="food_25" value="0">
+                                    <label for="food_25_no">No</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="question">
+                            <div class="question-text">26. I avoid conventional eggs and mostly eat organic pasture-raised eggs.</div>
+                            <div class="question-options">
+                                <div class="option">
+                                    <input type="radio" id="food_26_yes" name="food_26" value="1">
+                                    <label for="food_26_yes">Yes</label>
+                                </div>
+                                <div class="option">
+                                    <input type="radio" id="food_26_no" name="food_26" value="0">
+                                    <label for="food_26_no">No</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="question">
+                            <div class="question-text">27. I buy organic milk and cheese originating from pasture-raised grass-fed cows.</div>
+                            <div class="question-options">
+                                <div class="option">
+                                    <input type="radio" id="food_27_yes" name="food_27" value="1">
+                                    <label for="food_27_yes">Yes</label>
+                                </div>
+                                <div class="option">
+                                    <input type="radio" id="food_27_no" name="food_27" value="0">
+                                    <label for="food_27_no">No</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sleep Section -->
+            <div class="section">
+                <div class="section-header">Circadian Rhythm & Sleep</div>
+                <div class="section-content">
+                    <div class="question">
+                        <div class="question-text">1. I consistently use a sleep-tracking device.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="sleep_1_yes" name="sleep_1" value="1">
+                                <label for="sleep_1_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="sleep_1_no" name="sleep_1" value="0">
+                                <label for="sleep_1_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">2. I sleep between seven and eight hours every night.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="sleep_2_yes" name="sleep_2" value="1">
+                                <label for="sleep_2_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="sleep_2_no" name="sleep_2" value="0">
+                                <label for="sleep_2_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">3. I have a consistent bedtime and usually am asleep within a one-hour window every night.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="sleep_3_yes" name="sleep_3" value="1">
+                                <label for="sleep_3_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="sleep_3_no" name="sleep_3" value="0">
+                                <label for="sleep_3_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">4. I have a consistent wake time and wake within a one-hour window every morning.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="sleep_4_yes" name="sleep_4" value="1">
+                                <label for="sleep_4_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="sleep_4_no" name="sleep_4" value="0">
+                                <label for="sleep_4_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">5. I can fall asleep easily nearly every night.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="sleep_5_yes" name="sleep_5" value="1">
+                                <label for="sleep_5_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="sleep_5_no" name="sleep_5" value="0">
+                                <label for="sleep_5_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">6. I can stay asleep throughout the night and fall back to sleep easily.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="sleep_6_yes" name="sleep_6" value="1">
+                                <label for="sleep_6_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="sleep_6_no" name="sleep_6" value="0">
+                                <label for="sleep_6_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">7. I do not have insomnia.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="sleep_7_yes" name="sleep_7" value="1">
+                                <label for="sleep_7_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="sleep_7_no" name="sleep_7" value="0">
+                                <label for="sleep_7_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">8. I feel rested and energetic during the day and rarely feel sluggish or like I need a nap midday.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="sleep_8_yes" name="sleep_8" value="1">
+                                <label for="sleep_8_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="sleep_8_no" name="sleep_8" value="0">
+                                <label for="sleep_8_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">9. I do not snore.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="sleep_9_yes" name="sleep_9" value="1">
+                                <label for="sleep_9_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="sleep_9_no" name="sleep_9" value="0">
+                                <label for="sleep_9_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">10. I have not been diagnosed with sleep apnea.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="sleep_10_yes" name="sleep_10" value="1">
+                                <label for="sleep_10_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="sleep_10_no" name="sleep_10" value="0">
+                                <label for="sleep_10_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">11. I have not taken any prescription sleep medication in the last year.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="sleep_11_yes" name="sleep_11" value="1">
+                                <label for="sleep_11_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="sleep_11_no" name="sleep_11" value="0">
+                                <label for="sleep_11_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">12. I have not taken antihistamine-based sleep medication in the last year (e.g., Unisom, Excedrin PM, Tylenol PM, Benadryl).</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="sleep_12_yes" name="sleep_12" value="1">
+                                <label for="sleep_12_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="sleep_12_no" name="sleep_12" value="0">
+                                <label for="sleep_12_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">13. My phone and other devices never interrupt my sleep with sounds, lights, or vibration.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="sleep_13_yes" name="sleep_13" value="1">
+                                <label for="sleep_13_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="sleep_13_no" name="sleep_13" value="0">
+                                <label for="sleep_13_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Meal Timing Section -->
+            <div class="section">
+                <div class="section-header">Meal Timing and Habits</div>
+                <div class="section-content">
+                    <div class="question">
+                        <div class="question-text">1. I can fast for fourteen hours without difficulty.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="meal_1_yes" name="meal_1" value="1">
+                                <label for="meal_1_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="meal_1_no" name="meal_1" value="0">
+                                <label for="meal_1_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">2. I eat at consistent meal times each day (e.g., having dinner between 5:00 and 7:00 p.m. most days).</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="meal_2_yes" name="meal_2" value="1">
+                                <label for="meal_2_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="meal_2_no" name="meal_2" value="0">
+                                <label for="meal_2_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">3. I am intentional about when I eat and do not tend to mindlessly snack and graze throughout the day.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="meal_3_yes" name="meal_3" value="1">
+                                <label for="meal_3_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="meal_3_no" name="meal_3" value="0">
+                                <label for="meal_3_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">4. I pause before eating to be mindful of my food.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="meal_4_yes" name="meal_4" value="1">
+                                <label for="meal_4_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="meal_4_no" name="meal_4" value="0">
+                                <label for="meal_4_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">5. I express gratitude for my food before I eat.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="meal_5_yes" name="meal_5" value="1">
+                                <label for="meal_5_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="meal_5_no" name="meal_5" value="0">
+                                <label for="meal_5_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">6. I eat slowly and methodically, trying to chew every bite fully before swallowing.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="meal_6_yes" name="meal_6" value="1">
+                                <label for="meal_6_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="meal_6_no" name="meal_6" value="0">
+                                <label for="meal_6_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">7. I make a point to sit down while I'm eating.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="meal_7_yes" name="meal_7" value="1">
+                                <label for="meal_7_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="meal_7_no" name="meal_7" value="0">
+                                <label for="meal_7_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">8. I do not use my phone while eating.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="meal_8_yes" name="meal_8" value="1">
+                                <label for="meal_8_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="meal_8_no" name="meal_8" value="0">
+                                <label for="meal_8_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">9. I do not watch TV or use my computer while eating.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="meal_9_yes" name="meal_9" value="1">
+                                <label for="meal_9_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="meal_9_no" name="meal_9" value="0">
+                                <label for="meal_9_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">10. I eat most of my meals with other people, like friends, family, or colleagues.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="meal_10_yes" name="meal_10" value="1">
+                                <label for="meal_10_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="meal_10_no" name="meal_10" value="0">
+                                <label for="meal_10_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">11. I am cognizant of not eating just before bedtime, and I try to stop eating three hours before I go to sleep.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="meal_11_yes" name="meal_11" value="1">
+                                <label for="meal_11_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="meal_11_no" name="meal_11" value="0">
+                                <label for="meal_11_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Light Section -->
+            <div class="section">
+                <div class="section-header">Light</div>
+                <div class="section-content">
+                    <div class="question">
+                        <div class="question-text">1. I spend at least fifteen minutes outside within one hour of waking every day.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="light_1_yes" name="light_1" value="1">
+                                <label for="light_1_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="light_1_no" name="light_1" value="0">
+                                <label for="light_1_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">2. I go outside during daylight hours at least three times for more than five minutes each.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="light_2_yes" name="light_2" value="1">
+                                <label for="light_2_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="light_2_no" name="light_2" value="0">
+                                <label for="light_2_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">3. I watch the sunset outdoors at least three days per week.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="light_3_yes" name="light_3" value="1">
+                                <label for="light_3_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="light_3_no" name="light_3" value="0">
+                                <label for="light_3_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">4. I spend at least three cumulative hours outside per day (add up walks, gardening, eating outdoors, playing outdoors with children, etc.).</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="light_4_yes" name="light_4" value="1">
+                                <label for="light_4_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="light_4_no" name="light_4" value="0">
+                                <label for="light_4_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">5. I consistently use red lights in my home at night or blue-light-blocking glasses after the sun goes down.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="light_5_yes" name="light_5" value="1">
+                                <label for="light_5_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="light_5_no" name="light_5" value="0">
+                                <label for="light_5_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">6. I consistently use dimmers on my lights at home and turn them down in the evening.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="light_6_yes" name="light_6" value="1">
+                                <label for="light_6_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="light_6_no" name="light_6" value="0">
+                                <label for="light_6_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">7. I do not view any screens in the evening without using blue-light-blocking glasses.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="light_7_yes" name="light_7" value="1">
+                                <label for="light_7_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="light_7_no" name="light_7" value="0">
+                                <label for="light_7_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">8. My phone, tablet, and computer turn to "night mode" or "dark mode" after dark.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="light_8_yes" name="light_8" value="1">
+                                <label for="light_8_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="light_8_no" name="light_8" value="0">
+                                <label for="light_8_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">9. My bedroom is completely dark, and I use blackout shades.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="light_9_yes" name="light_9" value="1">
+                                <label for="light_9_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="light_9_no" name="light_9" value="0">
+                                <label for="light_9_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">10. My bedroom is absent of TVs, computers, LED clocks, or other lit screens.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="light_10_yes" name="light_10" value="1">
+                                <label for="light_10_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="light_10_no" name="light_10" value="0">
+                                <label for="light_10_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Movement Section -->
+            <div class="section">
+                <div class="section-header">Stressing the Body - Movement</div>
+                <div class="section-content">
+                    <div class="question">
+                        <div class="question-text">1. I use a wearable step tracker every day.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="movement_1_yes" name="movement_1" value="1">
+                                <label for="movement_1_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="movement_1_no" name="movement_1" value="0">
+                                <label for="movement_1_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">2. I am certain I get at least 7,000 steps each day based on wearable data.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="movement_2_yes" name="movement_2" value="1">
+                                <label for="movement_2_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="movement_2_no" name="movement_2" value="0">
+                                <label for="movement_2_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">3. I consistently use a wearable tracker to track my resting heart rate.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="movement_3_yes" name="movement_3" value="1">
+                                <label for="movement_3_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="movement_3_no" name="movement_3" value="0">
+                                <label for="movement_3_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">4. Based on my wearable data, I know that my resting heart rate has been less than 60 bpm on average over the last month.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="movement_4_yes" name="movement_4" value="1">
+                                <label for="movement_4_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="movement_4_no" name="movement_4" value="0">
+                                <label for="movement_4_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">5. I know that I get 150 minutes of moderate aerobic activity per week (the equivalent of brisk or more strenuous walking).</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="movement_5_yes" name="movement_5" value="1">
+                                <label for="movement_5_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="movement_5_no" name="movement_5" value="0">
+                                <label for="movement_5_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">6. I lift weights at least twice per week for at least thirty minutes.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="movement_6_yes" name="movement_6" value="1">
+                                <label for="movement_6_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="movement_6_no" name="movement_6" value="0">
+                                <label for="movement_6_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">7. I do not sit for more than one hour at a time without standing up and intentionally moving my body for at least two minutes.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="movement_7_yes" name="movement_7" value="1">
+                                <label for="movement_7_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="movement_7_no" name="movement_7" value="0">
+                                <label for="movement_7_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">8. I find ways to play sports or physical games at least once per week (e.g., pickleball, table tennis, volleyball, soccer, Spikeball, basketball, Frisbee, or dodgeball).</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="movement_8_yes" name="movement_8" value="1">
+                                <label for="movement_8_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="movement_8_no" name="movement_8" value="0">
+                                <label for="movement_8_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Temperature Section -->
+            <div class="section">
+                <div class="section-header">Temperature</div>
+                <div class="section-content">
+                    <div class="question">
+                        <div class="question-text">1. I expose myself to hot temperatures intentionally at least once per week (e.g., sauna or hot yoga).</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="temp_1_yes" name="temp_1" value="1">
+                                <label for="temp_1_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="temp_1_no" name="temp_1" value="0">
+                                <label for="temp_1_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">2. I expose myself to cold temperatures intentionally at least three times per week for more than one minute (e.g., cold plunge, cryotherapy, or cold shower).</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="temp_2_yes" name="temp_2" value="1">
+                                <label for="temp_2_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="temp_2_no" name="temp_2" value="0">
+                                <label for="temp_2_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">3. I seek out ways to get very cold or very hot for its health benefits.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="temp_3_yes" name="temp_3" value="1">
+                                <label for="temp_3_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="temp_3_no" name="temp_3" value="0">
+                                <label for="temp_3_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mind-Body Section -->
+            <div class="section">
+                <div class="section-header">Mind-Body: Stress, Relationships, and Emotional Health</div>
+                <div class="section-content">
+                    <div class="question">
+                        <div class="question-text">1. I use a wearable tracker that indicates my heart rate variability.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="mind_1_yes" name="mind_1" value="1">
+                                <label for="mind_1_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="mind_1_no" name="mind_1" value="0">
+                                <label for="mind_1_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">2. Based on my wearable data, I know some of the factors that negatively impact my HRV, like alcohol or work stress.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="mind_2_yes" name="mind_2" value="1">
+                                <label for="mind_2_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="mind_2_no" name="mind_2" value="0">
+                                <label for="mind_2_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">3. I practice mindfulness habits, like intentional deep breathing, journaling, meditation, or prayer, every day.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="mind_3_yes" name="mind_3" value="1">
+                                <label for="mind_3_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="mind_3_no" name="mind_3" value="0">
+                                <label for="mind_3_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">4. I have worked with a practitioner (like a therapist or coach) or program to address suboptimal behavioral and thought patterns and have successfully improved these.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="mind_4_yes" name="mind_4" value="1">
+                                <label for="mind_4_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="mind_4_no" name="mind_4" value="0">
+                                <label for="mind_4_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">5. I have worked with a practitioner (like a therapist or coach) or program to address past traumas in my life from childhood and adulthood that may be overtly or subtly impacting my life and have significantly improved my relationship to these experiences.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="mind_5_yes" name="mind_5" value="1">
+                                <label for="mind_5_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="mind_5_no" name="mind_5" value="0">
+                                <label for="mind_5_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">6. I feel confident in my ability to use my body to calm my mind (e.g., walking, breathwork, or tapping, a method of stimulating acupressure points with the fingertips to manage emotions).</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="mind_6_yes" name="mind_6" value="1">
+                                <label for="mind_6_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="mind_6_no" name="mind_6" value="0">
+                                <label for="mind_6_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">7. I feel confident in my ability to use my mind to calm my body (e.g., mantras, body scans, or visualizations).</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="mind_7_yes" name="mind_7" value="1">
+                                <label for="mind_7_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="mind_7_no" name="mind_7" value="0">
+                                <label for="mind_7_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">8. I have at least one trusted person in my life with whom I can talk openly and honestly about most topics.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="mind_8_yes" name="mind_8" value="1">
+                                <label for="mind_8_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="mind_8_no" name="mind_8" value="0">
+                                <label for="mind_8_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">9. I am comfortable honestly and openly expressing my feelings to the important people in my life.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="mind_9_yes" name="mind_9" value="1">
+                                <label for="mind_9_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="mind_9_no" name="mind_9" value="0">
+                                <label for="mind_9_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">10. I have a set of clear strategies I can use when I get stressed or activated to calm myself down.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="mind_10_yes" name="mind_10" value="1">
+                                <label for="mind_10_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="mind_10_no" name="mind_10" value="0">
+                                <label for="mind_10_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">11. I have a sense of purpose bigger than myself.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="mind_11_yes" name="mind_11" value="1">
+                                <label for="mind_11_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="mind_11_no" name="mind_11" value="0">
+                                <label for="mind_11_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">12. I "ground" regularly by sitting or standing barefoot directly on the ground.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="mind_12_yes" name="mind_12" value="1">
+                                <label for="mind_12_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="mind_12_no" name="mind_12" value="0">
+                                <label for="mind_12_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">13. I consistently feel awe for my life and the world around me.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="mind_13_yes" name="mind_13" value="1">
+                                <label for="mind_13_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="mind_13_no" name="mind_13" value="0">
+                                <label for="mind_13_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">14. I am aware of my self-talk and intentionally communicate lovingly to myself and catch myself when I am not.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="mind_14_yes" name="mind_14" value="1">
+                                <label for="mind_14_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="mind_14_no" name="mind_14" value="0">
+                                <label for="mind_14_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">15. I intentionally focus on gratitude each day.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="mind_15_yes" name="mind_15" value="1">
+                                <label for="mind_15_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="mind_15_no" name="mind_15" value="0">
+                                <label for="mind_15_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">16. I feel hopeful and excited about the future.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="mind_16_yes" name="mind_16" value="1">
+                                <label for="mind_16_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="mind_16_no" name="mind_16" value="0">
+                                <label for="mind_16_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">17. I feel that I am authentically expressing myself most of the time and do not need to suppress my personality or true self.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="mind_17_yes" name="mind_17" value="1">
+                                <label for="mind_17_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="mind_17_no" name="mind_17" value="0">
+                                <label for="mind_17_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">18. I have outlets that let me bring my creative visions to life (e.g., art, music, writing, crafts, cooking, decorating, or planning activities or trips) and engage with them regularly.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="mind_18_yes" name="mind_18" value="1">
+                                <label for="mind_18_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="mind_18_no" name="mind_18" value="0">
+                                <label for="mind_18_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">19. I feel that anything is possible and believe that I can cultivate the life that I want.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="mind_19_yes" name="mind_19" value="1">
+                                <label for="mind_19_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="mind_19_no" name="mind_19" value="0">
+                                <label for="mind_19_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">20. I feel limitless.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="mind_20_yes" name="mind_20" value="1">
+                                <label for="mind_20_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="mind_20_no" name="mind_20" value="0">
+                                <label for="mind_20_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">21. I feel a sense of connection to everything in the universe.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="mind_21_yes" name="mind_21" value="1">
+                                <label for="mind_21_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="mind_21_no" name="mind_21" value="0">
+                                <label for="mind_21_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ingested Toxins Section -->
+            <div class="section">
+                <div class="section-header">Toxins - Ingested Toxins</div>
+                <div class="section-content">
+                    <div class="question">
+                        <div class="question-text">1. I filter my tap water with a reverse osmosis filter or a high-efficacy charcoal filter (e.g., Berkey) and rarely ever drink unfiltered water.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="ingested_1_yes" name="ingested_1" value="1">
+                                <label for="ingested_1_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="ingested_1_no" name="ingested_1" value="0">
+                                <label for="ingested_1_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">2. I have checked my water quality against the Environmental Working Group (EWG) database and understand whether specific contaminants are above recommended levels.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="ingested_2_yes" name="ingested_2" value="1">
+                                <label for="ingested_2_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="ingested_2_no" name="ingested_2" value="0">
+                                <label for="ingested_2_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">3. I drink at least half an ounce of water per pound of body weight per day.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="ingested_3_yes" name="ingested_3" value="1">
+                                <label for="ingested_3_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="ingested_3_no" name="ingested_3" value="0">
+                                <label for="ingested_3_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">4. When I leave the house, I bring filtered water in a non-plastic (e.g., glass or metal) bottle.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="ingested_4_yes" name="ingested_4" value="1">
+                                <label for="ingested_4_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="ingested_4_no" name="ingested_4" value="0">
+                                <label for="ingested_4_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">5. I avoid drinking water out of single-use plastic bottles.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="ingested_5_yes" name="ingested_5" value="1">
+                                <label for="ingested_5_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="ingested_5_no" name="ingested_5" value="0">
+                                <label for="ingested_5_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">6. I avoid foods that have natural flavors or artificial flavors.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="ingested_6_yes" name="ingested_6" value="1">
+                                <label for="ingested_6_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="ingested_6_no" name="ingested_6" value="0">
+                                <label for="ingested_6_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">7. I do not eat foods with any artificial dyes in them.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="ingested_7_yes" name="ingested_7" value="1">
+                                <label for="ingested_7_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="ingested_7_no" name="ingested_7" value="0">
+                                <label for="ingested_7_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">8. I rarely store my food in plastic containers or buy food in plastic containers, and instead opt for metal or glass storage.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="ingested_8_yes" name="ingested_8" value="1">
+                                <label for="ingested_8_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="ingested_8_no" name="ingested_8" value="0">
+                                <label for="ingested_8_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">9. I do not drink more than one alcoholic beverage per day. (Note: A standard serving of alcohol in the United States is defined as 14 grams of alcohol, which is less than you might think. This is 5 ounces of wine, 12 ounces of beer, or a single 1.5‑ounce shot of distilled spirits.)</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="ingested_9_yes" name="ingested_9" value="1">
+                                <label for="ingested_9_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="ingested_9_no" name="ingested_9" value="0">
+                                <label for="ingested_9_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">10. I do not drink more than seven alcoholic beverages per week.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="ingested_10_yes" name="ingested_10" value="1">
+                                <label for="ingested_10_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="ingested_10_no" name="ingested_10" value="0">
+                                <label for="ingested_10_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">11. I do not smoke cigarettes or other tobacco products.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="ingested_11_yes" name="ingested_11" value="1">
+                                <label for="ingested_11_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="ingested_11_no" name="ingested_11" value="0">
+                                <label for="ingested_11_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">12. I do not use chewing tobacco or similar forms of chewable nicotine.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="ingested_12_yes" name="ingested_12" value="1">
+                                <label for="ingested_12_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="ingested_12_no" name="ingested_12" value="0">
+                                <label for="ingested_12_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">13. I do not smoke cigars.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="ingested_13_yes" name="ingested_13" value="1">
+                                <label for="ingested_13_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="ingested_13_no" name="ingested_13" value="0">
+                                <label for="ingested_13_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">14. I do not vape.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="ingested_14_yes" name="ingested_14" value="1">
+                                <label for="ingested_14_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="ingested_14_no" name="ingested_14" value="0">
+                                <label for="ingested_14_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">15. I avoid over-the-counter medications, like acetaminophen, ibuprofen, diphenhydramine, and/or acid-suppressing medications; I take them cumulatively fewer than five times per year.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="ingested_15_yes" name="ingested_15" value="1">
+                                <label for="ingested_15_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="ingested_15_no" name="ingested_15" value="0">
+                                <label for="ingested_15_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">16. I have not taken oral antibiotics in the past two years.</div>
+                        <div class="question-options">
+                            <div class="option">
+                                <input type="radio" id="ingested_16_yes" name="ingested_16" value="1">
+                                <label for="ingested_16_yes">Yes</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="ingested_16_no" name="ingested_16" value="0">
+                                <label for="ingested_16_no">No</label>
+                            </div>

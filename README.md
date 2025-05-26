@@ -100,7 +100,7 @@
 
 * **Negative drivers**
 
-  * High‐fructose + hyperinsulinemia → ↑SREBP‑1c lipogenesis
+  * High‐fructose / Processed food + hyperinsulinemia → ↑SREBP‑1c lipogenesis
   * ↑Uric acid → mitochondrial ROS → ↓AMPK → ↑lipogenesis
   * Chronic sleep loss & stress → ↑cortisol → FFA flux to liver
 * **Positive interventions**
@@ -120,3 +120,5 @@
 5. **Fiber**: ≥25 g/day (legumes, oats, psyllium) to enhance SCFA→AMPK, improve satiety, and increase uric acid clearance.
 
 Together, these interventions “rewire” the map back toward high AMPK/mTOR balance, restored thyroid‐mitochondrial axis, lower uric acid, and resolution of NAFLD and insulin resistance.
+
+[Take the quiz ](good_energy_quiz.html)
